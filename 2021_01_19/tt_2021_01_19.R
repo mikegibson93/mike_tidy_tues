@@ -70,3 +70,8 @@ kenya <- kenya %>%
 summary(kenya)
 
 boxplot(kenya$pop100000)
+
+
+#asdf
+
+
