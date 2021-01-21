@@ -1,5 +1,19 @@
 # Tidy Tuesday 2021-01-19
 # Kenya Census
+# Kenya
+library(reshape2)
+library(rnaturalearth)
+library(sp)
+library(sf)
+library(raster)
+library(rgdal)
+library(dplyr)
+library(cowplot)
+library(extrafont)
+library(here)
+library(tidyverse)
+library(rgeos)
+
 rm(list=ls())
 remotes::install_github("Shelmith-Kariuki/rKenyaCensus")
 
@@ -47,7 +61,7 @@ kenya<- inner_join(households, crops, by = "County")
 rm(crops,households)
 
 
-kenya <- kenya %>%
+kenya <-as.data.frame(kenya) %>%
   mutate(numHH1000 = NumberOfHouseholds/1000, 
          pop100000 = Population/10^6, 
          pro_male = Male/Total, 
@@ -64,14 +78,28 @@ kenya <- kenya %>%
          pro_khat = `Khat (Miraa)`/Farming,
          avg_HH_size = AverageHouseholdSize,
          male = Male,
-         female = Female)%>%
-  select(-c(Population,NumberOfHouseholds, Male, AverageHouseholdSize,Female,Intersex))
+         female = Female)
 
 summary(kenya)
 
 boxplot(kenya$pop100000)
 
+africa <- ne_countries(continent = "Africa")
 
-#asdf
+dir<-"~/Dropbox/tidy_tuesdays/2021_01_19"
+shapefilepath<-paste(dir,"Shapefile",sep="/")
 
+# Kenya county: https://data.humdata.org/dataset/47-counties-of-kenya
+kenya <- readOGR(shapefilepath)
+crs(kenya) <- crs(africa)
+kenya_sf <- st_as_sf(kenya)
+africa_sf <- st_as_sf(africa)
 
+k.col <- ifelse(africa_sf$sovereignt == "Kenya", "#CC0101", "grey30")
+
+kenya_map <- 
+  ggplot(africa_sf) +
+  geom_sf(fill = k.col, color = "grey70") +
+  theme(plot.background = element_rect(fill = "transparent")) 
+
+kenya_map
