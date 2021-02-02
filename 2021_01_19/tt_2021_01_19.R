@@ -3,15 +3,34 @@
 # Tidy Tuesday: 2021 Week 4
 # 19 Jan 2021: Kenya Census
 
+### Section 1: Loading packages and data
+rm(list=ls())
 
+#packages
 library(ggplot2)
 library(dplyr)
 library(rKenyaCensus)
 library(sf)
+
+#data
+gender <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-19/gender.csv')
+crops <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-19/crops.csv')
 households <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-19/households.csv')
+
 
 ## Extract shapefile
 counties_sf = KenyaCounties_SHP %>% sf::st_as_sf()
+
+
+# Section 2: basic cleaning and data set construction
+
+
+
+
+
+
+
+
 
 # Make county names upper for join
 households = households[-which(households$County=='Kenya'),]
